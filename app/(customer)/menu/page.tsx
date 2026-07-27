@@ -106,7 +106,7 @@ export default function MenuPage() {
 
       await supabase
         .from('restaurant_tables')
-        .update({ status: 'occupied', current_session_id: sessionId })
+        .update({ status: 'occupied', current_session_id: sessionId } as never)
         .eq('id', 1)
 
       toast.success('Order placed! The kitchen has been notified.')
