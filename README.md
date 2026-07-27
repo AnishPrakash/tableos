@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TableOS — Intelligent Restaurant Management System
+### VibeAthon 6.0 | Vibe Coding Hackathon 2K26
 
-## Getting Started
+> **"The Operating System for Modern Restaurants"**
 
-First, run the development server:
+🌐 **Live App:** https://your-tableos.vercel.app  
+📂 **GitHub:** https://github.com/YOUR_USERNAME/tableos
+
+---
+
+## 🏆 User Stories Completed
+
+| Level | Story | Status |
+|-------|-------|--------|
+| 🥉 Bronze | Modern, intuitive UI for customers and management | ✅ Complete |
+| 🥈 Silver | Secure Auth (Email/OTP + Google OAuth) + role-based access | ✅ Complete |
+| 🥈 Silver | Digitized workflows (Menu, Queue, Orders, Billing, Notifications) | ✅ Complete |
+| 🥇 Gold | Management Dashboard (Orders, Tables, Inventory, Sales, Analytics) | ✅ Complete |
+| 🏅 Platinum | AI-powered recommendations, demand forecasting, operational insights | ✅ Complete |
+| ⭐ Bonus | Erlang-C queue math, dynamic pricing engine, KDS with urgency alerts | ✅ Complete |
+
+---
+
+## ⚙️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Next.js 14 (App Router) + TypeScript |
+| Styling | Tailwind CSS + Shadcn UI |
+| Backend | Next.js API Routes (Serverless) |
+| Database | Supabase (PostgreSQL) |
+| Real-time | Supabase Realtime (WebSockets) |
+| Auth | Supabase Auth (Email + Google OAuth) |
+| AI | OpenRouter API (mistral-7b-instruct) |
+| Charts | Recharts |
+| Deployment | Vercel |
+| Version Control | GitHub |
+
+---
+
+## 🤖 AI Usage
+
+- **OpenRouter API** (free tier) with `mistralai/mistral-7b-instruct:free`
+- Personalized dish recommendations based on order history and inventory
+- Operational insights for management (what to restock, what to promote)
+- Demand forecasting based on weekly sales data
+
+---
+
+## 🧮 Innovative Features (Bonus)
+
+1. **Erlang-C Queue Mathematics** — Production-grade wait time prediction
+2. **Dynamic Pricing Engine** — Algorithmic price adjustment based on demand, time, and stock
+3. **Kitchen Display System (KDS)** — Real-time order board with urgency alerts
+4. **Auto-Inventory Deduction** — PostgreSQL triggers auto-deduct stock on order confirmation
+5. **Auto Menu Availability** — Items go "unavailable" automatically when ingredients run low
+6. **Role-Based Access** — 4 distinct roles: Customer, Waiter, Kitchen, Admin
+
+---
+
+## 🔑 Demo Accounts
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@tableos.demo | Demo@1234 |
+| Waiter | waiter@tableos.demo | Demo@1234 |
+| Kitchen | kitchen@tableos.demo | Demo@1234 |
+| Customer | customer@tableos.demo | Demo@1234 |
+
+---
+
+## 🏃 Run Locally
 
 ```bash
+git clone https://github.com/YOUR_USERNAME/tableos.git
+cd tableos
+npm install
+cp .env.example .env.local
+# Fill in your Supabase and OpenRouter keys
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
