@@ -3,6 +3,13 @@ import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+const roleRoutes: Record<string, string> = {
+  admin: '/dashboard',
+  waiter: '/orders',
+  kitchen: '/kds',
+  customer: '/menu',
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
@@ -23,7 +30,20 @@ export async function GET(request: NextRequest) {
         },
       }
     )
-    await supabase.auth.exchangeCodeForSession(code)
+
+    const { data: { user } } = await supabase.auth.exchangeCodeForSession(code)
+
+    if (user) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+      const role = (profile?.role as string) ?? 'customer'
+      return NextResponse.redirect(`${origin}${roleRoutes[role] ?? '/menu'}`)
+    }
   }
+
   return NextResponse.redirect(`${origin}/menu`)
 }
