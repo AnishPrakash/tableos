@@ -5,6 +5,19 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'sonner'
 
+type UserRole = 'admin' | 'waiter' | 'kitchen' | 'customer'
+
+interface Profile {
+  role: UserRole
+}
+
+const roleRoutes: Record<UserRole, string> = {
+  admin: '/dashboard',
+  waiter: '/orders',
+  kitchen: '/kds',
+  customer: '/menu',
+}
+
 export default function LoginPage() {
   const router = useRouter()
   const [email, setEmail] = useState('')
@@ -18,21 +31,14 @@ export default function LoginPage() {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) throw error
 
-      // Fetch role to redirect appropriately
       const { data: profile } = await supabase
         .from('profiles')
         .select('role')
         .eq('id', data.user.id)
-        .single()
+        .single<Profile>()
 
       toast.success('Welcome back!')
-      const roleRoutes: Record<string, string> = {
-        admin: '/dashboard',
-        waiter: '/orders',
-        kitchen: '/kds',
-        customer: '/menu',
-      }
-      router.push(roleRoutes[profile?.role || 'customer'])
+      router.push(roleRoutes[profile?.role ?? 'customer'])
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : 'Login failed')
     } finally {
@@ -48,23 +54,23 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#FAF5EC] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-amber-500 rounded-2xl flex items-center justify-center text-3xl font-bold text-white mx-auto mb-4">
+          <div className="w-16 h-16 bg-gradient-to-br from-orange-600 to-amber-500 rounded-2xl flex items-center justify-center text-3xl font-bold text-white mx-auto mb-4 shadow-md">
             T
           </div>
-          <h1 className="text-3xl font-bold text-white">Welcome back</h1>
-          <p className="text-gray-400 mt-2">Sign in to TableOS</p>
+          <h1 className="text-3xl font-bold text-stone-900">Welcome back</h1>
+          <p className="text-stone-500 mt-2">Sign in to TableOS</p>
         </div>
 
         {/* Card */}
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8">
+        <div className="bg-white border border-stone-200 rounded-2xl p-8 shadow-sm">
           {/* Google OAuth */}
           <button
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-100 text-gray-900 font-semibold py-3 rounded-xl transition-colors mb-6"
+            className="w-full flex items-center justify-center gap-3 bg-white hover:bg-stone-50 text-stone-800 font-semibold py-3 rounded-xl border border-stone-200 transition-colors mb-6 shadow-sm"
           >
             <svg width="20" height="20" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -77,56 +83,56 @@ export default function LoginPage() {
 
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-700" />
+              <div className="w-full border-t border-stone-200" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="bg-gray-900 px-3 text-gray-500">or continue with email</span>
+              <span className="bg-white px-3 text-stone-400">or continue with email</span>
             </div>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
+              <label className="block text-sm font-medium text-stone-700 mb-2">Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
-                className="w-full bg-gray-800 border border-gray-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-colors placeholder-gray-500"
+                className="w-full bg-stone-50 border border-stone-200 text-stone-900 rounded-xl px-4 py-3 focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400 transition-colors placeholder-stone-400"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
+              <label className="block text-sm font-medium text-stone-700 mb-2">Password</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="w-full bg-gray-800 border border-gray-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-colors placeholder-gray-500"
+                className="w-full bg-stone-50 border border-stone-200 text-stone-900 rounded-xl px-4 py-3 focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400 transition-colors placeholder-stone-400"
               />
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-all"
+              className="w-full bg-gradient-to-r from-orange-600 to-amber-500 hover:from-orange-700 hover:to-amber-600 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-all shadow-sm"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
 
-          <p className="text-center text-gray-400 text-sm mt-6">
+          <p className="text-center text-stone-400 text-sm mt-6">
             No account?{' '}
-            <Link href="/register" className="text-orange-400 hover:text-orange-300 font-medium">
+            <Link href="/register" className="text-orange-600 hover:text-orange-700 font-medium">
               Create one
             </Link>
           </p>
         </div>
 
         {/* Quick demo logins */}
-        <div className="mt-6 bg-gray-900/50 border border-gray-800 rounded-xl p-4">
-          <p className="text-gray-500 text-xs text-center mb-3">Demo accounts (hackathon judges)</p>
+        <div className="mt-6 bg-white/70 border border-stone-200 rounded-xl p-4 shadow-sm">
+          <p className="text-stone-400 text-xs text-center mb-3">Demo accounts (hackathon judges)</p>
           <div className="grid grid-cols-2 gap-2 text-xs">
             {[
               { role: 'Admin', email: 'admin@tableos.demo' },
@@ -137,15 +143,15 @@ export default function LoginPage() {
               <button
                 key={demo.role}
                 onClick={() => { setEmail(demo.email); setPassword('Demo@1234') }}
-                className="bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg p-2 text-left transition-colors"
+                className="bg-stone-50 hover:bg-orange-50 border border-stone-200 hover:border-orange-200 text-stone-600 rounded-lg p-2 text-left transition-colors"
               >
-                <span className="font-medium text-white">{demo.role}</span>
+                <span className="font-medium text-stone-900">{demo.role}</span>
                 <br />
-                <span className="text-gray-500">{demo.email}</span>
+                <span className="text-stone-400">{demo.email}</span>
               </button>
             ))}
           </div>
-          <p className="text-gray-600 text-xs text-center mt-2">Password: Demo@1234</p>
+          <p className="text-stone-400 text-xs text-center mt-2">Password: Demo@1234</p>
         </div>
       </div>
     </div>
