@@ -41,7 +41,7 @@ export default function QueuePage() {
           estimated_wait_minutes: waitResult.estimatedWaitMinutes,
         } as never)
         .select('id')
-        .single()
+        .single() as unknown as { data: { id: string } | null; error: Error | null }
 
       if (error) throw error
 
