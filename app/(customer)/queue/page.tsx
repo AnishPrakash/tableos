@@ -39,7 +39,7 @@ export default function QueuePage() {
           notes: form.notes,
           status: 'waiting',
           estimated_wait_minutes: waitResult.estimatedWaitMinutes,
-        })
+        } as never)
         .select('id')
         .single()
 

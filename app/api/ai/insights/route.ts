@@ -51,7 +51,7 @@ export async function POST() {
           title: i.title,
           content: `${i.insight} — Action: ${i.action}`,
           data: i,
-        }))
+        } as never))
       )
     }
 

@@ -38,7 +38,7 @@ export default function KDSPage() {
       .update({
         status: newStatus,
         ...(newStatus === 'ready' ? { prepared_at: new Date().toISOString() } : {}),
-      })
+      } as never)
       .eq('id', orderId)
 
     if (error) toast.error('Failed to update order')

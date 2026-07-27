@@ -36,7 +36,7 @@ export default function WaiterOrdersPage() {
   const markServed = async (orderId: string) => {
     const { error } = await supabase
       .from('orders')
-      .update({ status: 'served', served_at: new Date().toISOString() })
+      .update({ status: 'served', served_at: new Date().toISOString() }as never)
       .eq('id', orderId)
     if (error) toast.error('Failed to update')
     else toast.success('Marked as served')
