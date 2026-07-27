@@ -2,7 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 const roleRoutes: Record<string, string[]> = {
-  admin: ['/dashboard', '/inventory', '/staff', '/analytics'],
+  admin: ['/dashboard', '/inventory', '/staff', '/analytics', '/kds'],
   waiter: ['/orders'],
   kitchen: ['/kds'],
   customer: ['/menu', '/queue', '/bill'],

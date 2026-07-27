@@ -56,6 +56,12 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-[#FAF5EC] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
+        {/* Back to Home */}
+          <div className="mb-6">
+            <Link href="/" className="inline-flex items-center gap-2 text-stone-500 hover:text-stone-800 text-sm font-medium transition-colors">
+              ← Back to Home
+            </Link>
+          </div>
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-gradient-to-br from-orange-600 to-amber-500 rounded-2xl flex items-center justify-center text-3xl font-bold text-white mx-auto mb-4 shadow-md">
