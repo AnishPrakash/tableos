@@ -13,8 +13,10 @@ export async function POST(request: NextRequest) {
       .eq('session_id', userId || '')
       .limit(10)
 
-    const orderHistory = history?.map((o) => (o.menu_items as { name: string } | null)?.name || '').filter(Boolean) || []
-
+    const orderHistory = history?.map((o) => {
+      const menuItem = Array.isArray(o.menu_items) ? o.menu_items[0] : o.menu_items
+      return (menuItem as { name: string } | null)?.name || 'Unknown'
+    })
     // Get available items
     const { data: available } = await supabaseAdmin
       .from('menu_items')

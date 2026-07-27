@@ -44,7 +44,8 @@ export async function GET() {
     const itemCounts: Record<string, { name: string; count: number }> = {}
     popularOrders?.forEach((o) => {
       const id = String(o.menu_item_id)
-      const name = (o.menu_items as { name: string } | null)?.name || 'Unknown'
+      const menuItem = Array.isArray(o.menu_items) ? o.menu_items[0] : o.menu_items
+      const name = (menuItem as { name: string } | null)?.name || 'Unknown'
       if (!itemCounts[id]) itemCounts[id] = { name, count: 0 }
       itemCounts[id].count += o.quantity
     })
