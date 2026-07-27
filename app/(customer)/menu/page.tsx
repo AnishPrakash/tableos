@@ -1,4 +1,5 @@
 'use client'
+import AIRecommendations from '@/components/menu/AIRecommendations'
 import { useState, useMemo } from 'react'
 import { useRealtimeMenu } from '@/hooks/useRealtimeMenu'
 import { useAuth } from '@/hooks/useAuth'
@@ -199,6 +200,8 @@ export default function MenuPage() {
             Live menu — availability updates in real-time as the kitchen prepares orders
           </span>
         </div>
+
+        <AIRecommendations userId={user?.id} />
 
         <div className="flex gap-6">
           {/* Category Sidebar */}
