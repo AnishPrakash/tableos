@@ -4,7 +4,17 @@ import { createClient } from '@supabase/supabase-js'
 // Prevents "supabaseKey is required" crash during SSR where NEXT_PUBLIC_ vars
 // are not yet injected into the module scope.
 
-let _supabase: ReturnType<typeof createClient> | null = null
+export type Database = {
+  public: {
+    Tables: {
+      profiles: {
+        Row: { id: string; full_name: string | null; role: string | null }
+      }
+    }
+  }
+}
+
+let _supabase: ReturnType<typeof createClient<Database>> | null = null
 
 function getSupabaseClient() {
   if (_supabase) return _supabase
@@ -12,7 +22,7 @@ function getSupabaseClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
 
-  _supabase = createClient(url, key, {
+  _supabase = createClient<Database>(url, key, {
     auth: {
       persistSession: true,
       autoRefreshToken: true,

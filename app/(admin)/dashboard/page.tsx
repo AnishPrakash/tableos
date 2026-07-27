@@ -55,7 +55,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     fetchAnalytics()
-    const interval = setInterval(fetchAnalytics, 60000) // refresh every minute
+    const interval = setInterval(fetchAnalytics, 60000)
     return () => clearInterval(interval)
   }, [fetchAnalytics])
 
@@ -283,7 +283,7 @@ function InventoryTab() {
     quantity_available: number; reorder_threshold: number; cost_per_unit: number; supplier?: string
   }[]>([])
   const [loading, setLoading] = useState(true)
-  const { supabase: _s } = { supabase: null } // just to avoid lint warning
+  const { supabase: _s } = { supabase: null }
 
   useEffect(() => {
     import('@/lib/supabase').then(({ supabase }) => {

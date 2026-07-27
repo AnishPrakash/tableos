@@ -84,7 +84,7 @@ export default function MenuPage() {
             table_id: 1,
             customer_id: user?.id,
             status: 'active',
-          }as never)
+          } as never)
           .select('id')
           .single<{ id: string }>()
         if (error) throw error

@@ -25,16 +25,16 @@ export default function LandingPage() {
           .select('full_name, role')
           .eq('id', session.user.id)
           .single()
+        const typedProfile = profile as { full_name: string | null; role: string | null } | null
         setUser({
-          name: profile?.full_name || session.user.email?.split('@')[0] || 'User',
-          role: profile?.role ?? 'customer',
+          name: typedProfile?.full_name || session.user.email?.split('@')[0] || 'User',
+          role: typedProfile?.role ?? 'customer',
         })
       }
       setLoading(false)
     }
     checkAuth()
 
-    // Listen for auth changes (handles back-button logout detection)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) {
         setUser(null)

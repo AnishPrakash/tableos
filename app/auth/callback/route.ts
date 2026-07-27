@@ -40,7 +40,8 @@ export async function GET(request: NextRequest) {
         .eq('id', user.id)
         .single()
 
-      const role = (profile?.role as string) ?? 'customer'
+      const typedProfile = profile as { role: string | null } | null
+      const role = typedProfile?.role ?? 'customer'
       return NextResponse.redirect(`${origin}${roleRoutes[role] ?? '/menu'}`)
     }
   }
