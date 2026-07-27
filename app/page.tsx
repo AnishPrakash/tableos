@@ -1,6 +1,58 @@
+'use client'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { supabase } from '@/lib/supabase'
+
+const roleRoutes: Record<string, string> = {
+  admin: '/dashboard',
+  waiter: '/orders',
+  kitchen: '/kds',
+  customer: '/menu',
+}
 
 export default function LandingPage() {
+  const router = useRouter()
+  const [user, setUser] = useState<{ name: string; role: string } | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('full_name, role')
+          .eq('id', session.user.id)
+          .single()
+        setUser({
+          name: profile?.full_name || session.user.email?.split('@')[0] || 'User',
+          role: profile?.role ?? 'customer',
+        })
+      }
+      setLoading(false)
+    }
+    checkAuth()
+
+    // Listen for auth changes (handles back-button logout detection)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        setUser(null)
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [])
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    setUser(null)
+    router.refresh()
+  }
+
+  const handleGoToDashboard = () => {
+    if (user) router.push(roleRoutes[user.role] ?? '/menu')
+  }
+
   return (
     <main className="min-h-screen bg-[#FAF5EC] text-stone-900 overflow-hidden">
       {/* Hero */}
@@ -19,16 +71,44 @@ export default function LandingPage() {
               TableOS
             </span>
           </div>
+
           <div className="flex items-center gap-4">
-            <Link href="/login" className="text-stone-600 hover:text-stone-900 transition-colors">
-              Sign In
-            </Link>
-            <Link
-              href="/register"
-              className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-6 py-2 rounded-xl font-semibold transition-all shadow-sm"
-            >
-              Get Started
-            </Link>
+            {loading ? (
+              <div className="w-24 h-8 bg-stone-200 animate-pulse rounded-lg" />
+            ) : user ? (
+              <>
+                <button
+                  onClick={handleGoToDashboard}
+                  className="text-stone-600 hover:text-stone-900 transition-colors font-medium"
+                >
+                  Hi, {user.name.split(' ')[0]} 👋
+                </button>
+                <button
+                  onClick={handleGoToDashboard}
+                  className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-5 py-2 rounded-xl font-semibold transition-all shadow-sm"
+                >
+                  Go to Dashboard
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="text-stone-400 hover:text-red-500 transition-colors text-sm font-medium"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" className="text-stone-600 hover:text-stone-900 transition-colors">
+                  Sign In
+                </Link>
+                <Link
+                  href="/register"
+                  className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-6 py-2 rounded-xl font-semibold transition-all shadow-sm"
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
           </div>
         </nav>
 
@@ -50,18 +130,29 @@ export default function LandingPage() {
             Everything your restaurant needs — in one powerful platform.
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
-            <Link
-              href="/menu"
-              className="bg-gradient-to-r from-orange-500 to-amber-500 hover:scale-105 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-xl shadow-orange-200"
-            >
-              Browse Menu →
-            </Link>
-            <Link
-              href="/queue"
-              className="bg-white text-stone-800 border border-stone-200 shadow-sm hover:bg-stone-50 px-8 py-4 rounded-2xl font-bold text-lg transition-all"
-            >
-              Join Queue
-            </Link>
+            {user ? (
+              <button
+                onClick={handleGoToDashboard}
+                className="bg-gradient-to-r from-orange-500 to-amber-500 hover:scale-105 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-xl shadow-orange-200"
+              >
+                Go to Your Dashboard →
+              </button>
+            ) : (
+              <>
+                <Link
+                  href="/menu"
+                  className="bg-gradient-to-r from-orange-500 to-amber-500 hover:scale-105 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-xl shadow-orange-200"
+                >
+                  Browse Menu →
+                </Link>
+                <Link
+                  href="/queue"
+                  className="bg-white text-stone-800 border border-stone-200 shadow-sm hover:bg-stone-50 px-8 py-4 rounded-2xl font-bold text-lg transition-all"
+                >
+                  Join Queue
+                </Link>
+              </>
+            )}
           </div>
         </div>
 
