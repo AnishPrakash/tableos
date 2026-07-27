@@ -11,14 +11,13 @@ export function useAuth() {
 
   useEffect(() => {
     const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      setUser(session?.user ?? null)
-      if (session?.user) {
-        await fetchProfile(session.user.id)
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user ?? null)
+      if (user) {
+        await fetchProfile(user.id)
       }
       setLoading(false)
     }
-
     getSession()
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
@@ -27,9 +26,9 @@ export function useAuth() {
         await fetchProfile(session.user.id)
       } else {
         setProfile(null)
+        setLoading(false)
       }
     })
-
     return () => subscription.unsubscribe()
   }, [])
 
@@ -40,6 +39,7 @@ export function useAuth() {
       .eq('id', userId)
       .single()
     setProfile(data)
+    setLoading(false)
   }
 
   const signOut = async () => {

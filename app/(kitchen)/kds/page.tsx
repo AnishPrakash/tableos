@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { getTimeElapsed, getStatusColor } from '@/lib/utils'
 import { toast } from 'sonner'
 import type { Order } from '@/types'
+import Link from 'next/link'
 
 const KDS_STATUSES = ['pending', 'confirmed', 'preparing', 'ready'] as const
 type KDSStatus = typeof KDS_STATUSES[number]
@@ -94,6 +95,9 @@ export default function KDSPage() {
             </div>
           </div>
           <div className="flex items-center gap-4">
+            <Link href="/" className="px-4 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-700 transition-colors">
+              ← Home
+            </Link>
             <div className="flex items-center gap-2 text-sm">
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
               <span className="text-gray-300">Live</span>

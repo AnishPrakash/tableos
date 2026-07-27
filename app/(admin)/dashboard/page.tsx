@@ -120,6 +120,9 @@ export default function AdminDashboard() {
             <Link href="/kds" className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100">
               🍳 KDS
             </Link>
+            <Link href="/" className="px-4 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-100 transition-colors">
+              ← Home
+            </Link>
           </nav>
         </div>
       </header>

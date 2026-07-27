@@ -53,25 +53,30 @@ export async function getMenuRecommendations(
   availableItems: string[],
   overstockedItems: string[]
 ): Promise<{ dish: string; reason: string }[]> {
-  const prompt = `You are a restaurant AI assistant. Based on the customer's order history and restaurant inventory, recommend 3 dishes.
+  const prompt = `You are a restaurant AI assistant. Recommend exactly 3 dishes based on the data below.
 
 Customer's previous orders: ${orderHistory.join(', ') || 'First visit'}
 Available dishes: ${availableItems.join(', ')}
-Overstocked items (prioritize recommending these): ${overstockedItems.join(', ') || 'None'}
+Overstocked items (prioritize these): ${overstockedItems.join(', ') || 'None'}
 
-Respond ONLY with valid JSON array. No markdown. No explanation outside JSON. Format:
-[{"dish": "Dish Name", "reason": "Short reason under 60 chars"}, ...]`
-
-  const result = await callOpenRouter([{ role: 'user', content: prompt }])
+Rules:
+- Only recommend dishes from the available list
+- Respond ONLY with a valid JSON array, no markdown, no extra text
+- Format: [{"dish": "Dish Name", "reason": "Short reason under 60 chars"}]`
 
   try {
+    const result = await callOpenRouter([{ role: 'user', content: prompt }])
     const clean = result.replace(/```json|```/g, '').trim()
-    const parsed = JSON.parse(clean)
+    // Extract JSON array even if model adds extra text
+    const match = clean.match(/\[[\s\S]*\]/)
+    if (!match) throw new Error('No JSON array found')
+    const parsed = JSON.parse(match[0])
     return Array.isArray(parsed) ? parsed.slice(0, 3) : []
   } catch {
+    // Fallback: return first 3 available items
     return availableItems.slice(0, 3).map((dish) => ({
       dish,
-      reason: 'Popular choice',
+      reason: 'Popular choice at our restaurant',
     }))
   }
 }
@@ -84,7 +89,7 @@ export async function getOperationalInsights(analyticsData: {
   lowStockItems: string[]
   weeklyRevenueTrend: number[]
 }): Promise<{ title: string; insight: string; action: string; priority: 'high' | 'medium' | 'low' }[]> {
-  const prompt = `You are a restaurant business intelligence AI. Analyze this restaurant's operational data and provide actionable insights.
+  const prompt = `You are a restaurant business intelligence AI. Analyze this data and provide 3 actionable insights.
 
 Revenue (this week): ₹${analyticsData.totalRevenue}
 Total orders: ${analyticsData.totalOrders}
@@ -93,14 +98,16 @@ Waste items: ${analyticsData.wasteItems.join(', ') || 'None logged'}
 Low stock: ${analyticsData.lowStockItems.join(', ') || 'None'}
 Revenue trend (last 7 days): ${analyticsData.weeklyRevenueTrend.join(', ')}
 
-Respond ONLY with valid JSON array of exactly 3 insights. No markdown. Format:
-[{"title": "Short title", "insight": "Observation", "action": "Specific action to take", "priority": "high|medium|low"}]`
-
-  const result = await callOpenRouter([{ role: 'user', content: prompt }])
+Rules:
+- Respond ONLY with a valid JSON array, no markdown, no extra text
+- Format: [{"title": "Short title", "insight": "Observation", "action": "Specific action to take", "priority": "high|medium|low"}]`
 
   try {
+    const result = await callOpenRouter([{ role: 'user', content: prompt }])
     const clean = result.replace(/```json|```/g, '').trim()
-    const parsed = JSON.parse(clean)
+    const match = clean.match(/\[[\s\S]*\]/)
+    if (!match) throw new Error('No JSON array found')
+    const parsed = JSON.parse(match[0])
     return Array.isArray(parsed) ? parsed.slice(0, 3) : []
   } catch {
     return [

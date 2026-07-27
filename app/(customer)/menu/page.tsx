@@ -14,6 +14,34 @@ interface CartItem extends MenuItem {
   special_instructions?: string
 }
 
+const getCategoryImage = (categoryId: number, name: string) => {
+  const nameLower = name.toLowerCase()
+  // Specific dish matches first
+  if (nameLower.includes('dal') || nameLower.includes('daal')) return 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&h=300&fit=crop'
+  if (nameLower.includes('paneer')) return 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=400&h=300&fit=crop'
+  if (nameLower.includes('biryani')) return 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=400&h=300&fit=crop'
+  if (nameLower.includes('naan') || nameLower.includes('roti') || nameLower.includes('bread')) return 'https://images.unsplash.com/photo-1619894991209-9f9694be045a?w=400&h=300&fit=crop'
+  if (nameLower.includes('lassi') || nameLower.includes('chai') || nameLower.includes('tea')) return 'https://images.unsplash.com/photo-1561677978-583a7431ef26?w=400&h=300&fit=crop'
+  if (nameLower.includes('gulab') || nameLower.includes('kheer') || nameLower.includes('halwa')) return 'https://images.unsplash.com/photo-1666275437782-f0543aec3a8c?w=400&h=300&fit=crop'
+  if (nameLower.includes('samosa')) return 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&h=300&fit=crop'
+  if (nameLower.includes('burger')) return 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop'
+  if (nameLower.includes('pizza')) return 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop'
+  if (nameLower.includes('salad')) return 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop'
+  if (nameLower.includes('soup')) return 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop'
+  if (nameLower.includes('chicken')) return 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400&h=300&fit=crop'
+  if (nameLower.includes('mutton') || nameLower.includes('lamb')) return 'https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop'
+  if (nameLower.includes('rice') || nameLower.includes('pulao')) return 'https://images.unsplash.com/photo-1516684732162-798a0062be99?w=400&h=300&fit=crop'
+  // Category fallbacks
+  const categoryImages: Record<number, string> = {
+    1: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop', // salads/starters
+    2: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&h=300&fit=crop', // mains/curry
+    3: 'https://images.unsplash.com/photo-1619894991209-9f9694be045a?w=400&h=300&fit=crop', // breads
+    4: 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400&h=300&fit=crop', // drinks
+    5: 'https://images.unsplash.com/photo-1666275437782-f0543aec3a8c?w=400&h=300&fit=crop', // desserts
+  }
+  return categoryImages[categoryId] || 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&h=300&fit=crop'
+}
+
 export default function MenuPage() {
   const { items, categories, loading } = useRealtimeMenu()
   const { user, profile } = useAuth()
@@ -268,15 +296,19 @@ export default function MenuPage() {
                         : 'border-gray-100 opacity-60'
                     }`}
                   >
-                    <div className="h-36 bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center text-5xl relative">
-                      {item.is_vegetarian ? '🟢' : '🔴'}
-                      <span className="ml-2">
-                        {item.category_id === 1 ? '🥗' :
-                         item.category_id === 2 ? '🍛' :
-                         item.category_id === 3 ? '🫓' :
-                         item.category_id === 4 ? '🥤' :
-                         item.category_id === 5 ? '🍮' : '🍚'}
-                      </span>
+                    <div className="h-36 relative overflow-hidden bg-orange-50">
+                      <img
+                        src={getCategoryImage(item.category_id, item.name)}
+                        alt={item.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop'
+                        }}
+                      />
+                      <div className="absolute top-2 right-2 w-5 h-5 rounded-full border-2 border-white shadow"
+                        style={{ background: item.is_vegetarian ? '#22c55e' : '#ef4444' }}
+                        title={item.is_vegetarian ? 'Vegetarian' : 'Non-vegetarian'}
+                      />
                       {!item.is_available && (
                         <div className="absolute inset-0 bg-gray-900/40 flex items-center justify-center">
                           <span className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
