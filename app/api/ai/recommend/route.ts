@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     const overstockedItems = inventory?.map((i) => i.name) || []
 
-    const recommendations = await getMenuRecommendations(orderHistory, availableItems, overstockedItems)
+    const recommendations = await getMenuRecommendations(orderHistory ?? [], availableItems, overstockedItems)
     return NextResponse.json({ recommendations })
   } catch (err) {
     console.error('Recommendations error:', err)
