@@ -66,7 +66,6 @@ export default function MenuPage() {
     setPlacingOrder(true)
 
     try {
-      // Create or find open session for table 1 (demo — in production, table selection UI goes here)
       let sessionId: string
 
       const { data: existingSession } = await supabase
@@ -74,7 +73,7 @@ export default function MenuPage() {
         .select('id')
         .eq('status', 'active')
         .eq('table_id', 1)
-        .single()
+        .single<{ id: string }>()
 
       if (existingSession) {
         sessionId = existingSession.id
@@ -87,12 +86,11 @@ export default function MenuPage() {
             status: 'active',
           })
           .select('id')
-          .single()
+          .single<{ id: string }>()
         if (error) throw error
         sessionId = newSession.id
       }
 
-      // Insert order items
       const orderItems = cart.map((item) => ({
         session_id: sessionId,
         menu_item_id: item.id,
@@ -106,7 +104,6 @@ export default function MenuPage() {
       const { error: ordersError } = await supabase.from('orders').insert(orderItems)
       if (ordersError) throw ordersError
 
-      // Update table status
       await supabase
         .from('restaurant_tables')
         .update({ status: 'occupied', current_session_id: sessionId })
@@ -271,7 +268,6 @@ export default function MenuPage() {
                         : 'border-gray-100 opacity-60'
                     }`}
                   >
-                    {/* Image placeholder with gradient */}
                     <div className="h-36 bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center text-5xl relative">
                       {item.is_vegetarian ? '🟢' : '🔴'}
                       <span className="ml-2">
