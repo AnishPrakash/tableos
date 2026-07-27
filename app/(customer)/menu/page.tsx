@@ -101,7 +101,7 @@ export default function MenuPage() {
         special_instructions: item.special_instructions,
       }))
 
-      const { error: ordersError } = await supabase.from('orders').insert(orderItems)
+      const { error: ordersError } = await supabase.from('orders').insert(orderItems as never)
       if (ordersError) throw ordersError
 
       await supabase
