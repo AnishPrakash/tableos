@@ -2,38 +2,77 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 24.6 95% 53.1%;
-    --primary-foreground: 60 9.1% 97.8%;
-    --secondary: 60 4.8% 95.9%;
-    --secondary-foreground: 24 9.8% 10%;
-    --muted: 60 4.8% 95.9%;
-    --muted-foreground: 25 5.3% 44.7%;
-    --accent: 60 4.8% 95.9%;
-    --accent-foreground: 24 9.8% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 9.1% 97.8%;
-    --border: 20 5.9% 90%;
-    --input: 20 5.9% 90%;
-    --ring: 24.6 95% 53.1%;
-    --radius: 0.75rem;
+    /* ── Trattoria Warmth Palette ── */
+    --background:         38 55% 96%;      /* warm parchment cream */
+    --foreground:         20 35% 12%;      /* deep espresso brown */
+
+    --card:               36 50% 98%;      /* soft warm white */
+    --card-foreground:    20 35% 12%;
+
+    --popover:            36 50% 98%;
+    --popover-foreground: 20 35% 12%;
+
+    --primary:            16 58% 44%;      /* terracotta */
+    --primary-foreground: 38 55% 96%;      /* cream on terracotta */
+
+    --secondary:          36 30% 90%;      /* warm sand */
+    --secondary-foreground: 20 25% 22%;    /* dark warm brown */
+
+    --muted:              35 25% 92%;      /* light beige */
+    --muted-foreground:   20 12% 48%;      /* medium warm gray */
+
+    --accent:             148 22% 42%;     /* herb sage green */
+    --accent-foreground:  38 55% 96%;
+
+    --destructive:        0 70% 50%;
+    --destructive-foreground: 38 55% 96%;
+
+    --border:             30 22% 86%;      /* warm light border */
+    --input:              30 22% 86%;
+    --ring:               16 58% 44%;      /* terracotta ring */
+    --radius:             0.75rem;
+  }
+
+  .dark {
+    --background:         20 25% 10%;      /* deep warm charcoal */
+    --foreground:         38 40% 92%;      /* warm cream */
+
+    --card:               20 22% 14%;
+    --card-foreground:    38 40% 92%;
+
+    --popover:            20 22% 14%;
+    --popover-foreground: 38 40% 92%;
+
+    --primary:            16 58% 52%;      /* brighter terracotta in dark */
+    --primary-foreground: 20 25% 10%;
+
+    --secondary:          20 18% 20%;
+    --secondary-foreground: 38 35% 85%;
+
+    --muted:              20 18% 18%;
+    --muted-foreground:   30 15% 58%;
+
+    --accent:             148 22% 48%;
+    --accent-foreground:  20 25% 10%;
+
+    --destructive:        0 65% 55%;
+    --destructive-foreground: 38 40% 92%;
+
+    --border:             20 18% 22%;
+    --input:              20 18% 22%;
+    --ring:               16 58% 52%;
   }
 }
 
 @layer utilities {
   .gradient-text {
-    @apply bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-orange-700 to-amber-600 bg-clip-text text-transparent;
   }
-  
+
   .glass-card {
-    @apply bg-white/80 backdrop-blur-sm border border-gray-200/50 shadow-sm;
+    @apply bg-white/70 backdrop-blur-sm border border-orange-100/60 shadow-sm;
   }
-  
+
   .status-badge {
     @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border;
   }
