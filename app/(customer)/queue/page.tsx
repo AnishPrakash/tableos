@@ -48,7 +48,7 @@ export default function QueuePage() {
       setJoined({
         position,
         wait: waitResult.estimatedWaitMinutes,
-        id: data.id,
+        id: data?.id ?? '',
       })
       toast.success("You've joined the queue!")
     } catch (err: unknown) {
