@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getOperationalInsights } from '@/lib/openrouter'
-import { supabaseAdmin } from '@/lib/supabase'
+import { supabaseAdmin } from '@/lib/supabase-admin'
 
 export async function POST() {
   try {
