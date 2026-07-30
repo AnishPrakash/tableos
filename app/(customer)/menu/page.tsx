@@ -140,7 +140,7 @@ export default function MenuPage() {
       setCart([])
       setShowCart(false)
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : 'Failed to place order')
+      toast.error((err as { message?: string })?.message ?? 'Failed to place order')
     } finally {
       setPlacingOrder(false)
     }
