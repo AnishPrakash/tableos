@@ -43,6 +43,7 @@ const getCategoryImage = (categoryId: number, name: string) => {
 }
 
 export default function MenuPage() {
+  const router = useRouter()
   const { items, categories, loading } = useRealtimeMenu()
   const { user, profile } = useAuth()
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null)
