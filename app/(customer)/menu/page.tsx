@@ -8,7 +8,7 @@ import { formatCurrency } from '@/lib/utils'
 import type { MenuItem } from '@/types'
 import { toast } from 'sonner'
 import Link from 'next/link'
-
+import { useRouter } from 'next/navigation'
 interface CartItem extends MenuItem {
   quantity: number
   special_instructions?: string
@@ -75,6 +75,7 @@ export default function MenuPage() {
       return [...prev, { ...item, quantity: 1 }]
     })
     toast.success(`${item.name} added to cart`)
+    router.push('/bill')
   }
 
   const updateCartQty = (itemId: number, delta: number) => {
